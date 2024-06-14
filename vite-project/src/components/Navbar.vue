@@ -1,25 +1,26 @@
 <template>
   <nav class="navbar">
-
-    <ul class="navbar__left">
-      <div class="navbar__logo">
-        <!-- <img src="@/assets/logo.png" alt="Логотип" class="logo"> -->
-         <p>LOGO</p>
+    <div class="container">
+      <div class="navbar__left">
+        <div class="navbar__logo">
+          <img src="../assets/logo.png" alt="Логотип" class="logo">
+        </div>
+        <ul>
+          <li><router-link to="/">Главная</router-link></li>
+          <li><router-link to="/appointments">Запись</router-link></li>
+        </ul>
       </div>
-      <li><router-link to="/">Главная</router-link></li>
-      <li><router-link to="/appointments">Запись</router-link></li>
-    </ul>
-    <ul class="navbar__right">
-      <li>
-        <router-link to="/profile">
-          Личный кабинет
-        </router-link>
-      </li>
-      <li><router-link to="/login">Вход</router-link></li>
-      <li><router-link to="/register">Регистрация</router-link></li>
-      <li @click="logout">Выход</li>
-    </ul>
-
+      <ul class="navbar__right">
+        <li>
+          <router-link to="/profile">
+            Личный кабинет
+          </router-link>
+        </li>
+        <li><router-link to="/login">Вход</router-link></li>
+        <li><router-link to="/register">Регистрация</router-link></li>
+        <li @click="logout">Выход</li>
+      </ul>
+    </div>
   </nav>
 </template>
 
@@ -60,41 +61,52 @@ export default {
 .navbar {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 20px 0;
   background-color: #239AB5;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  justify-content: space-between;
+  justify-content: center;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  font-size: 20px;
 }
 
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
 
 .navbar__logo {
   display: flex;
   align-items: center;
   color: black;
+  margin-right: 200px;
 }
 
 .logo {
-  width: 50px;
-  height: 50px;
+  max-width: 100%;
+  width: 100px;
 }
 
 .navbar__left,
 .navbar__right {
   display: flex;
-  list-style: none;
-  gap: 20px;
   align-items: center;
+  list-style: none;
 }
 
-.navbar__left {
+.navbar__left ul {
+  display: flex;
   gap: 120px;
+  margin: 0;
+  padding: 0;
 }
 
 .navbar__right li:hover {
   cursor: pointer;
 }
+
 a {
   color: #fff;
 }
-
 </style>

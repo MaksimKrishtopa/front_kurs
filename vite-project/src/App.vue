@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Navbar />
-    <router-view />
+    <main>
+      <router-view />
+    </main>
     <Footer />
   </div>
 </template>
@@ -19,5 +21,18 @@ export default {
 </script>
 
 <style>
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
+main {
+  flex: 1;
+}
+
+/* Распределение компонентов внутри #app */
+.router-view {
+  flex-grow: 1; /* Расширяет этот блок, чтобы он занимал все доступное пространство */
+}
 </style>

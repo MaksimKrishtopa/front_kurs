@@ -18,7 +18,7 @@
         </li>
         <li><router-link to="/login">Вход</router-link></li>
         <li><router-link to="/register">Регистрация</router-link></li>
-        <li ><img src="../assets/logout-icon.svg" alt="logout-icon"></li>
+        <li><img src="../assets/logout-icon.svg" alt="logout-icon"></li>
       </ul>
     </div>
   </nav>

@@ -79,13 +79,13 @@ export default {
 .navbar__logo {
   display: flex;
   align-items: center;
-  color: black;
   margin-right: 200px;
+  width: 150px;
+  height: 150px;
 }
 
 .logo {
-  max-width: 100%;
-  width: 100px;
+  object-fit: contain;
 }
 
 .navbar__left,
@@ -108,5 +108,13 @@ export default {
 
 a {
   color: #fff;
+}
+
+a:hover {
+  text-shadow: #ffffff 0 0 10px;
+}
+
+.router-link-active {
+  border-bottom: 3px solid #fff; 
 }
 </style>

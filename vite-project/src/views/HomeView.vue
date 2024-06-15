@@ -8,8 +8,18 @@
           <button>Запись</button>
         </router-link>
       </div>
-      <img src="../assets/Group 59.png" alt="">
+      <img src="../assets/Group 59.png" alt="info-img">
 
+    </section>
+    <section class="welcome__section-quality">
+      <img src="../assets/Group 60.png" alt="quality-img">
+        <ul class="quality__list">
+          <li>Современное оборудование</li>
+          <li>Высококвалифицированные специалисты</li>
+          <li>Широкий спектр услуг</li>
+          <li>Удобная запись на прием</li>
+          <li>Индивидуальный подход к каждому пациенту запись на прием</li>
+        </ul>
     </section>
   </div>
   </template>
@@ -38,7 +48,8 @@
 
   .welcome__section {
     display: flex;
-    justify-content: space-between;
+    gap: 70px;
+
   }
 
   .welcome__page-info p {
@@ -70,6 +81,38 @@
   .router-link-active {
     color: #fff;
     text-shadow: none; 
+  }
+
+  .welcome__section-quality {
+    margin-top: 125px;
+    display: flex;
+    gap: 225px;
+    align-items: center;
+  }
+  
+  .quality__list {
+    color: #239AB5;
+    width: 700px;
+  }
+  
+  .quality__list li {
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 46px;
+    font-size: 36px;
+    font-weight: 500;
+  }
+  
+  .quality__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background-color: #00D300;
+    border-radius: 50%;
   }
 
   </style>

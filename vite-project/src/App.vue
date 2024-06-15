@@ -24,18 +24,17 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 #app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 main {
   margin-top: 100px;
   flex: 1;
+
 }
 
-/* Распределение компонентов внутри #app */
+
 .router-view {
-  flex-grow: 1; /* Расширяет этот блок, чтобы он занимал все доступное пространство */
+  flex-grow: 1; 
 }
 </style>

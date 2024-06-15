@@ -18,7 +18,7 @@
         </li>
         <li><router-link to="/login">Вход</router-link></li>
         <li><router-link to="/register">Регистрация</router-link></li>
-        <li @click="logout">Выход</li>
+        <li ><img src="../assets/logout-icon.svg" alt="logout-icon"></li>
       </ul>
     </div>
   </nav>
@@ -61,7 +61,6 @@ export default {
 .navbar {
   display: flex;
   align-items: center;
-  padding: 20px 0;
   background-color: #239AB5;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   justify-content: center;

@@ -27,7 +27,7 @@
   
       const login = async () => {
         try {
-          const response = await fetch('http://localhost:8000/api/login', {
+          const response = await fetch('http://localhost:80/api/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -55,5 +55,20 @@
   </script>
   
   <style scoped>
-  /* Стили для LoginForm */
+
+  * {
+    color: #343434;
+  }
+  form {
+    color: #343434;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  button {
+    background-color: #239AB5;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
   </style>

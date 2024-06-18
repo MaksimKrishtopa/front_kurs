@@ -13,46 +13,37 @@
   </template>
   
   <script>
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useAuth } from '../store/auth'
-  
-  export default {
-    name: 'LoginForm',
-    setup() {
-      const router = useRouter()
-      const { setToken } = useAuth()
-      const email = ref('')
-      const password = ref('')
-  
-      const login = async () => {
-        try {
-          const response = await fetch('http://localhost:80/api/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              email: email.value,
-              password: password.value
-            })
-          });
-          const data = await response.json();
-          setToken(data.token)
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
+export default {
+  name: 'LoginForm',
+  setup() {
+    const store = useStore()
+    const router = useRouter()
+    const email = ref('')
+    const password = ref('')
+
+    const login = async () => {
+      try {
+        const response = await store.dispatch('login', { email: email.value, password: password.value })
+        if (response) {
           router.push('/')
-        } catch (error) {
-          console.error('Login error', error);
         }
-      }
-  
-      return {
-        email,
-        password,
-        login
+      } catch (error) {
+        console.error('Login error:', error)
       }
     }
+
+    return {
+      email,
+      password,
+      login
+    }
   }
-  </script>
+}
+</script>
   
   <style scoped>
 

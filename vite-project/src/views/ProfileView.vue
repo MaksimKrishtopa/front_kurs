@@ -4,52 +4,47 @@
       <h2>Личный кабинет</h2>
       <li><a href="#" @click="logout">Выход</a></li>
     </div>
-    <div class="profile-info">
-      <p><strong>Фамилия:</strong> {{ profile.lastName }}</p>
-      <p><strong>Имя:</strong> {{ profile.firstName }}</p>
-      <p><strong>Отчество:</strong> {{ profile.middleName }}</p>
+    <div v-if="profile" class="profile-info">
+      <p><strong>Фамилия:</strong> {{ profile.surname }}</p>
+      <p><strong>Имя:</strong> {{ profile.name }}</p>
+      <p><strong>Отчество:</strong> {{ profile.patronymic }}</p>
       <p><strong>Пол:</strong> {{ profile.gender }}</p>
-      <p><strong>Дата рождения:</strong> {{ profile.birthDate }}</p>
+      <p><strong>Дата рождения:</strong> {{ profile.date_of_birth }}</p>
       <p><strong>Номер телефона:</strong> {{ profile.phone }}</p>
       <p><strong>Email:</strong> {{ profile.email }}</p>
+    </div>
+    <div v-else>
+      <p>Данные профиля не загружены.</p>
     </div>
   </div>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue'
-import { useAuth } from '../store/auth'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'UserProfile',
   setup() {
-    const { token } = useAuth()
-    const profile = ref({
-      lastName: '',
-      firstName: '',
-      middleName: '',
-      gender: '',
-      birthDate: '',
-      phone: '',
-      email: ''
-    })
+    const store = useStore()
+    const router = useRouter()
+    const profile = ref(null)
 
     onMounted(async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/user', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        profile.value = await response.json()
+        await store.dispatch('fetchUser')
+        profile.value = store.getters.userData
       } catch (error) {
         console.error('Error fetching profile:', error)
       }
     })
 
     const logout = () => {
-      // Логика выхода из системы
-      alert('Выход из системы')
+      store.commit('updateUserToken', null)
+      store.commit('updateUserData', null)
+      document.cookie = 'user_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      router.push('/login')
     }
 
     return {
@@ -59,6 +54,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .profile-container {
@@ -77,7 +73,6 @@ export default {
   border-top-right-radius: 8px;
   background-color: #fff;
 }
-
 
 .profile__header h2 {
   color: #239AB5;

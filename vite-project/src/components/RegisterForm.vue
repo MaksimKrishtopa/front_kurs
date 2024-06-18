@@ -16,16 +16,16 @@
       </div>
       <div class="input-group gender_dob">
         <div>
-        <label for="gender">Пол</label>
-        <select id="gender" v-model="gender" required>
-          <option value="male">Мужской</option>
-          <option value="female">Женский</option>
-        </select>
-      </div>
+          <label for="gender">Пол</label>
+          <select id="gender" v-model="gender" required>
+            <option value="male">Мужской</option>
+            <option value="female">Женский</option>
+          </select>
+        </div>
         <div>
-        <label for="date_of_birth">Дата рождения</label>
-        <input type="date" id="date_of_birth" v-model="dateOfBirth" required />
-      </div>
+          <label for="date_of_birth">Дата рождения</label>
+          <input type="date" id="date_of_birth" v-model="dateOfBirth" required />
+        </div>
       </div>
       <div class="input-group">
         <label for="phone">Телефон</label>
@@ -39,56 +39,69 @@
         <label for="password">Пароль</label>
         <input type="password" id="password" v-model="password" required />
       </div>
+      <p v-if="registrationError" class="error-message">{{ registrationError }}</p>
       <button type="submit">Создать аккаунт</button>
       <router-link to="/login">Уже есть аккаунт?</router-link>
     </form>
   </div>
 </template>
 
-  <script>
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
-  
-  export default {
-    name: 'RegisterForm',
-    setup() {
-      const router = useRouter()
-      const email = ref('')
-      const password = ref('')
-      const confirmPassword = ref('')
-  
-      const register = async () => {
-        if (password.value !== confirmPassword.value) {
-          alert('Passwords do not match!')
-          return
-        }
-        try {
-          const response = await fetch('http://localhost:8000/api/register', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              email: email.value,
-              password: password.value
-            })
-          });
-          const data = await response.json();
-          router.push('/login')
-        } catch (error) {
-          console.error('Registration error', error);
-        }
+<script>
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
+export default {
+  name: 'RegisterForm',
+  setup() {
+    const store = useStore()
+    const router = useRouter()
+    const surname = ref('')
+    const name = ref('')
+    const patronymic = ref('')
+    const gender = ref('')
+    const dateOfBirth = ref('')
+    const phone = ref('')
+    const email = ref('')
+    const password = ref('')
+    const registrationError = ref(null) // Добавляем переменную для ошибки регистрации
+
+    const register = async () => {
+      const userData = {
+        surname: surname.value,
+        name: name.value,
+        patronymic: patronymic.value,
+        gender: gender.value,
+        date_of_birth: dateOfBirth.value,
+        phone: phone.value,
+        email: email.value,
+        password: password.value
       }
-  
-      return {
-        email,
-        password,
-        confirmPassword,
-        register
+
+      try {
+        await store.dispatch('registration', userData)
+        router.push('/')
+      } catch (error) {
+        console.error('Registration error:', error)
+        registrationError.value = 'Ошибка при регистрации. Пожалуйста, попробуйте снова.'
       }
     }
+
+    return {
+      surname,
+      name,
+      patronymic,
+      gender,
+      dateOfBirth,
+      phone,
+      email,
+      password,
+      register,
+      registrationError // Возвращаем ошибку регистрации
+    }
   }
-  </script>
+}
+</script>
   
   <style scoped>
 

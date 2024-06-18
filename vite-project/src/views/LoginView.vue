@@ -17,6 +17,6 @@
   </script>
   
   <style scoped>
-  /* Стили для LoginView */
+ 
   </style>
   

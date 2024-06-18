@@ -1,4 +1,3 @@
-// store/auth.js
 
 import { createStore } from 'vuex'
 
@@ -34,7 +33,7 @@ const store = createStore({
   actions: {
     async registration({ commit, state }, userData) {
       try {
-        console.log('Sending user data:', userData); // Логирование данных
+        console.log('Sending user data:', userData); 
         const response = await fetch(state.api_url + 'registration', {
           method: 'POST',
           headers: {

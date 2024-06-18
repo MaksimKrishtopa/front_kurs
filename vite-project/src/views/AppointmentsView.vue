@@ -31,7 +31,7 @@ export default {
   name: 'AppointmentsView',
   methods: {
     cancelAppointment() {
-      // Логика отмены записи
+      
       alert('Запись отменена');
     }
   }

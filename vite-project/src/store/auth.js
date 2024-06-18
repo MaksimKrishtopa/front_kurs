@@ -1,18 +1,20 @@
 // store/auth.js
 
 import { createStore } from 'vuex'
-import axios from 'axios'
-import router from '../router'
 
 const store = createStore({
   state: {
     user_token: null,
     user_data: null,
-    api_url: 'http://localhost:8000/api/'
+    api_url: '/api/' // Базовый URL для запросов API
   },
   getters: {
     config(state) {
-      return { headers: { "Authorization": 'Bearer ' + state.user_token } }
+      return {
+        headers: {
+          "Authorization": 'Bearer ' + state.user_token
+        }
+      }
     },
     userToken(state) {
       return state.user_token
@@ -32,23 +34,46 @@ const store = createStore({
   actions: {
     async registration({ commit, state }, userData) {
       try {
-        const response = await axios.post(state.api_url + 'registration', userData)
-        if (response.data.message === 'User has been registered') {
-          commit('updateUserToken', response.data.token)
-          document.cookie = `user_token=${response.data.token}`
-          router.push('/')
+        console.log('Sending user data:', userData); // Логирование данных
+        const response = await fetch(state.api_url + 'registration', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userData)
+        })
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json()
+        if (data.token) {
+          commit('updateUserToken', data.token)
+          document.cookie = `user_token=${data.token}`
+          commit('updateUserData', data.user)
+          return true
         }
       } catch (error) {
         console.error('Registration error:', error)
-        throw error; // Перебрасываем ошибку для обработки в компоненте
+        console.error('Error details:', error.message || 'No response data')
+        throw error
       }
     },
     async login({ commit, state }, credentials) {
       try {
-        const response = await axios.post(state.api_url + 'login', credentials)
-        if (response.data.token) {
-          commit('updateUserToken', response.data.token)
-          document.cookie = `user_token=${response.data.token}`
+        const response = await fetch(state.api_url + 'login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(credentials)
+        })
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json()
+        if (data.token) {
+          commit('updateUserToken', data.token)
+          document.cookie = `user_token=${data.token}`
           return true
         }
       } catch (error) {
@@ -58,19 +83,19 @@ const store = createStore({
     },
     async fetchUser({ commit, state }) {
       try {
-        const response = await axios.get(state.api_url + 'user', {
+        const response = await fetch(state.api_url + 'user', {
+          method: 'GET',
           headers: {
             "Authorization": `Bearer ${state.user_token}`
           }
         })
-        if (response.status === 200) {
-          commit('updateUserData', response.data)
-        } else {
-          throw new Error('Failed to fetch user data')
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+        const data = await response.json()
+        commit('updateUserData', data)
       } catch (error) {
         console.error('Fetch user error:', error)
-        // Если возникает ошибка, обновим данные пользователя на null
         commit('updateUserData', null)
       }
     }

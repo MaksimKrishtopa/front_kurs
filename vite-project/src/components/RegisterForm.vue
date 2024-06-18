@@ -18,8 +18,8 @@
         <div>
           <label for="gender">Пол</label>
           <select id="gender" v-model="gender" required>
-            <option value="male">Мужской</option>
-            <option value="female">Женский</option>
+            <option value="Мужской">Мужской</option>
+            <option value="Женский">Женский</option>
           </select>
         </div>
         <div>
@@ -39,12 +39,13 @@
         <label for="password">Пароль</label>
         <input type="password" id="password" v-model="password" required />
       </div>
-      <p v-if="registrationError" class="error-message">{{ registrationError }}</p>
       <button type="submit">Создать аккаунт</button>
       <router-link to="/login">Уже есть аккаунт?</router-link>
     </form>
   </div>
 </template>
+
+
 
 <script>
 import { ref } from 'vue'
@@ -56,22 +57,23 @@ export default {
   setup() {
     const store = useStore()
     const router = useRouter()
+
     const surname = ref('')
     const name = ref('')
     const patronymic = ref('')
-    const gender = ref('')
+    const gender = ref('Мужской')
     const dateOfBirth = ref('')
     const phone = ref('')
     const email = ref('')
     const password = ref('')
-    const registrationError = ref(null) // Добавляем переменную для ошибки регистрации
+    const registrationError = ref(null)
 
     const register = async () => {
       const userData = {
         surname: surname.value,
         name: name.value,
         patronymic: patronymic.value,
-        gender: gender.value,
+        gender: gender.value, 
         date_of_birth: dateOfBirth.value,
         phone: phone.value,
         email: email.value,
@@ -79,11 +81,13 @@ export default {
       }
 
       try {
-        await store.dispatch('registration', userData)
-        router.push('/')
+        const response = await store.dispatch('registration', userData)
+        if (response) {
+          router.push('/')
+        }
       } catch (error) {
         console.error('Registration error:', error)
-        registrationError.value = 'Ошибка при регистрации. Пожалуйста, попробуйте снова.'
+        registrationError.value = error.message
       }
     }
 
@@ -97,7 +101,7 @@ export default {
       email,
       password,
       register,
-      registrationError // Возвращаем ошибку регистрации
+      registrationError
     }
   }
 }

@@ -41,9 +41,7 @@ export default {
     })
 
     const logout = () => {
-      store.commit('updateUserToken', null)
-      store.commit('updateUserData', null)
-      document.cookie = 'user_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      store.commit('clearUserToken')
       router.push('/login')
     }
 
@@ -54,7 +52,6 @@ export default {
   }
 }
 </script>
-
 
 <style scoped>
 .profile-container {

@@ -39,13 +39,13 @@
         <label for="password">Пароль</label>
         <input type="password" id="password" v-model="password" required />
       </div>
+      <p v-if="registrationError" class="error-message">{{ registrationError }}</p>
+      <p v-if="registrationSuccess" class="success-message">Регистрация прошла успешно! Перенаправление...</p>
       <button type="submit">Создать аккаунт</button>
       <router-link to="/login">Уже есть аккаунт?</router-link>
     </form>
   </div>
 </template>
-
-
 
 <script>
 import { ref } from 'vue'
@@ -67,13 +67,15 @@ export default {
     const email = ref('')
     const password = ref('')
     const registrationError = ref(null)
+    const registrationSuccess = ref(false)
 
     const register = async () => {
+      console.log('Registering user...')
       const userData = {
         surname: surname.value,
         name: name.value,
         patronymic: patronymic.value,
-        gender: gender.value, 
+        gender: gender.value,
         date_of_birth: dateOfBirth.value,
         phone: phone.value,
         email: email.value,
@@ -82,12 +84,18 @@ export default {
 
       try {
         const response = await store.dispatch('registration', userData)
+        console.log('Registration response:', response)
         if (response) {
-          router.push('/')
+          registrationSuccess.value = true
+          setTimeout(() => {
+            router.push('/login')  // Меняем редирект на /login для проверки
+          }, 2000) // Перенаправление через 2 секунды
+        } else {
+          registrationError.value = 'Ошибка при регистрации. Пожалуйста, попробуйте снова.'
         }
       } catch (error) {
         console.error('Registration error:', error)
-        registrationError.value = error.message
+        registrationError.value = 'Ошибка при регистрации. Пожалуйста, попробуйте снова.'
       }
     }
 
@@ -101,12 +109,14 @@ export default {
       email,
       password,
       register,
-      registrationError
+      registrationError,
+      registrationSuccess
     }
   }
 }
 </script>
-  
+
+
   <style scoped>
 
   h1 {
@@ -193,5 +203,13 @@ export default {
 
   .gender_dob label{
     width: 100%;
+  }
+
+  .error-message {
+    color: red;
+  }
+  
+  .success-message {
+    color: rgb(255, 255, 255);
   }
   </style>

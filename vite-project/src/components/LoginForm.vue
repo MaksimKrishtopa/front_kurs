@@ -1,18 +1,18 @@
 <template>
-    <form @submit.prevent="login">
-      <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" v-model="email" required />
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" required />
-      </div>
-      <button type="submit">Login</button>
-    </form>
-  </template>
-  
-  <script>
+  <form @submit.prevent="login">
+    <div>
+      <label for="email">Email</label>
+      <input type="email" id="email" v-model="email" required />
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" v-model="password" required />
+    </div>
+    <button type="submit">Login</button>
+  </form>
+</template>
+
+<script>
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -29,10 +29,13 @@ export default {
       try {
         const response = await store.dispatch('login', { email: email.value, password: password.value })
         if (response) {
-          router.push('/')
+          router.push('/profile')
+        } else {
+          alert('Ошибка входа. Пожалуйста, проверьте свои данные.')
         }
       } catch (error) {
         console.error('Login error:', error)
+        alert('Ошибка входа. Пожалуйста, попробуйте снова.')
       }
     }
 

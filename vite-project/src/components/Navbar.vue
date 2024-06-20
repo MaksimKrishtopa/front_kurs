@@ -11,47 +11,38 @@
         </ul>
       </div>
       <ul class="navbar__right">
-        <li>
-          <router-link to="/profile">
-            Личный кабинет
-          </router-link>
-        </li>
-        <li><router-link to="/login">Вход</router-link></li>
-        <li><router-link to="/register">Регистрация</router-link></li>
-        <li><img src="../assets/logout-icon.svg" alt="logout-icon"></li>
+        <li v-if="isAuthenticated"><router-link to="/profile">Личный кабинет</router-link></li>
+        <li v-if="!isAuthenticated"><router-link to="/login">Вход</router-link></li>
+        <li v-if="!isAuthenticated"><router-link to="/register">Регистрация</router-link></li>
+        <li v-if="!isAuthenticated" @click="logout"><img src="../assets/logout-icon.svg" alt="logout-icon"></li>
       </ul>
     </div>
   </nav>
 </template>
 
-  <!-- <nav class="navbar">
-    <ul class="navbar__left">
-      <li><router-link to="/">Главная</router-link></li>
-      <li><router-link :to="!isAuthenticated ? '/appointments' : '/login'">Запись</router-link></li>
-    </ul>
-    <ul class="navbar__right">
-      <li>
-        <router-link :to="isAuthenticated ? '/profile' : '/login'">
-          <img src="@/assets/user-icon.png" alt="Профиль" class="profile-icon" />
-          Личный кабинет
-        </router-link>
-      </li>
-      <li v-if="isAuthenticated" @click="logout">Выход</li>
-    </ul>
-  </nav> -->
-
-
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   computed: {
+    ...mapGetters(['userToken']),
     isAuthenticated() {
-      return !!localStorage.getItem('authToken');
+      return !!this.userToken
     }
   },
   methods: {
     logout() {
-      localStorage.removeItem('authToken');
-      this.$router.push('/login');
+      this.$store.dispatch('logout')
+      this.$router.push('/login')
+    }
+  },
+  created() {
+    // Проверка авторизации при загрузке компонента
+    if (this.isAuthenticated) {
+      // Загрузка данных пользователя, если они не загружены
+      if (!this.$store.getters.userData) {
+        this.$store.dispatch('fetchUser')
+      }
     }
   }
 }

@@ -12,9 +12,10 @@
       </div>
       <ul class="navbar__right">
         <li v-if="isAuthenticated"><router-link to="/profile">Личный кабинет</router-link></li>
-        <li v-if="!isAuthenticated"><router-link to="/login">Вход</router-link></li>
-        <li v-if="!isAuthenticated"><router-link to="/register">Регистрация</router-link></li>
-        <li v-if="!isAuthenticated" @click="logout"><img src="../assets/logout-icon.svg" alt="logout-icon"></li>
+        <li v-else><router-link to="/login">Вход</router-link></li>
+        <li v-if="isAuthenticated" @click="logout"><img src="../assets/logout-icon.svg" alt="logout-icon"></li>
+        
+        <li v-else><router-link to="/register">Регистрация</router-link></li>
       </ul>
     </div>
   </nav>
@@ -25,7 +26,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['userToken']),
+    ...mapGetters(['userToken', 'userData']),
     isAuthenticated() {
       return !!this.userToken
     }
@@ -38,9 +39,13 @@ export default {
   },
   created() {
     // Проверка авторизации при загрузке компонента
-    if (this.isAuthenticated) {
-      // Загрузка данных пользователя, если они не загружены
-      if (!this.$store.getters.userData) {
+    if (this.isAuthenticated && !this.userData) {
+      this.$store.dispatch('fetchUser')
+    }
+  },
+  watch: {
+    isAuthenticated(newVal) {
+      if (newVal && !this.userData) {
         this.$store.dispatch('fetchUser')
       }
     }

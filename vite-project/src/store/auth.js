@@ -49,7 +49,7 @@ const store = createStore({
           body: JSON.stringify(userData)
         })
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP error! status: ${response.status}`)
         }
         const data = await response.json()
         console.log('Received registration data:', data)
@@ -64,10 +64,7 @@ const store = createStore({
     },
     async login({ commit, state }, credentials) {
       try {
-        if (state.user_token) {
-          console.warn('User is already logged in.')
-          return true
-        }
+        console.log('Sending login request...')
         const response = await fetch(state.api_url + 'login', {
           method: 'POST',
           headers: {
@@ -76,10 +73,11 @@ const store = createStore({
           body: JSON.stringify(credentials)
         })
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP error! status: ${response.status}`)
         }
         const data = await response.json()
-        if (data.token) {
+        console.log('Received login data:', data)
+        if (data.status) {
           commit('updateUserToken', data.token)
           commit('updateUserData', data.user)
           return true
@@ -99,7 +97,7 @@ const store = createStore({
           }
         })
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP error! status: ${response.status}`)
         }
         const data = await response.json()
         commit('updateUserData', data)

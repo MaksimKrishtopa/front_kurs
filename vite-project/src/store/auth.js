@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import axios from "axios";
 
 const store = createStore({
   state: {
@@ -75,11 +76,10 @@ const store = createStore({
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
-        const data = await response.json()
-        console.log('Received login data:', data)
-        if (data.status) {
-          commit('updateUserToken', data.token)
-          commit('updateUserData', data.user)
+        const res = await response.json()
+        console.log('Received login data:', res.token.split('|')[1])
+        if (res.status) {
+          commit('updateUserToken', res.token)
           return true
         }
         return false
@@ -88,6 +88,10 @@ const store = createStore({
         return false
       }
     },
+
+
+
+    
     async fetchUser({ commit, state }) {
       try {
         const response = await fetch(state.api_url + 'user', {

@@ -4,7 +4,7 @@ const store = createStore({
   state: {
     user_token: localStorage.getItem('authToken') || null,
     user_data: JSON.parse(localStorage.getItem('userData')) || null,
-    api_url: '/api/' // Базовый URL для запросов API
+    api_url: '/api/'
   },
   getters: {
     config(state) {

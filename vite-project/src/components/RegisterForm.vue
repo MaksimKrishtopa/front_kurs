@@ -88,8 +88,8 @@ export default {
         if (response) {
           registrationSuccess.value = true
           setTimeout(() => {
-            router.push('/login')  // Меняем редирект на /login для проверки
-          }, 2000) // Перенаправление через 2 секунды
+            router.push('/login') 
+          }, 2000) 
         } else {
           registrationError.value = 'Ошибка при регистрации. Пожалуйста, попробуйте снова.'
         }

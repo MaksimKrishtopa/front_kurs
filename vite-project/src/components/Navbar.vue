@@ -38,7 +38,6 @@ export default {
     }
   },
   created() {
-    // Проверка авторизации при загрузке компонента
     if (this.isAuthenticated && !this.userData) {
       this.$store.dispatch('fetchUser')
     }

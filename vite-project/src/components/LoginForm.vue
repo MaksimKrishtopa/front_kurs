@@ -61,9 +61,7 @@ export default {
 };
 </script>
 
-  <style scoped>
-
-
+<style scoped>
   .loginform__container {
     display: flex;
     justify-content: center;
@@ -125,4 +123,4 @@ export default {
     padding-bottom: 35px;
     color: #fff;
   }
-  </style>
+</style>

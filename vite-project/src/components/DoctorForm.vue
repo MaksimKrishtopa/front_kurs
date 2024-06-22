@@ -49,6 +49,5 @@
   </script>
   
   <style scoped>
-  /* Стили для DoctorForm */
   </style>
   

@@ -2,7 +2,7 @@
   <div class="container profile-container">
     <div class="profile__header">
       <h2>Личный кабинет</h2>
-      <li><a href="#" @click="logout">Выход</a></li>
+      <li><a href="/" @click="logout">Выход</a></li>
     </div>
     <div v-if="profile" class="profile-info">
       <p><strong>Фамилия:</strong> {{ profile.surname }}</p>
@@ -20,15 +20,13 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
 
 export default {
   name: 'UserProfile',
   setup() {
     const store = useStore()
-    const router = useRouter()
     const profile = ref(null)
 
     onMounted(async () => {
@@ -42,7 +40,7 @@ export default {
 
     const logout = () => {
       store.commit('clearUserToken')
-      router.push('/login')
+      router.push('/');
     }
 
     return {

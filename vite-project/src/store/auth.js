@@ -1,11 +1,10 @@
 import { createStore } from 'vuex'
-import axios from "axios";
 
 const store = createStore({
   state: {
     user_token: localStorage.getItem('authToken') || null,
     user_data: JSON.parse(localStorage.getItem('userData')) || null,
-    api_url: '/api/'
+    api_url: 'http://localhost:80/api/'  
   },
   getters: {
     config(state) {
@@ -41,7 +40,6 @@ const store = createStore({
   actions: {
     async registration({ commit, state }, userData) {
       try {
-        console.log('Sending registration request...')
         const response = await fetch(state.api_url + 'registration', {
           method: 'POST',
           headers: {
@@ -53,7 +51,6 @@ const store = createStore({
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         const data = await response.json()
-        console.log('Received registration data:', data)
         if (data.status) {
           return true
         }
@@ -65,7 +62,6 @@ const store = createStore({
     },
     async login({ commit, state }, credentials) {
       try {
-        console.log('Sending login request...')
         const response = await fetch(state.api_url + 'login', {
           method: 'POST',
           headers: {
@@ -77,9 +73,8 @@ const store = createStore({
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         const res = await response.json()
-        console.log('Received login data:', res.token.split('|')[1])
         if (res.status) {
-          commit('updateUserToken', res.token)
+          commit('updateUserToken', res.token.split('|')[1])
           return true
         }
         return false
@@ -88,13 +83,9 @@ const store = createStore({
         return false
       }
     },
-
-
-
-    
     async fetchUser({ commit, state }) {
       try {
-        const response = await fetch(state.api_url + 'user', {
+        const response = await fetch(state.api_url + 'profile', {
           method: 'GET',
           headers: {
             "Authorization": 'Bearer ' + state.user_token
@@ -104,7 +95,7 @@ const store = createStore({
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         const data = await response.json()
-        commit('updateUserData', data)
+        commit('updateUserData', data.data)
       } catch (error) {
         console.error('Fetch user error:', error)
         commit('clearUserToken')

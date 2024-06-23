@@ -41,6 +41,7 @@ export default {
         const response = await store.dispatch('login', credentials);
         if (response) {
           console.log('Login successful');
+          await store.dispatch('fetchUser'); // Fetch user data after login
           router.push('/');
         } else {
           loginError.value = 'Ошибка при входе. Пожалуйста, проверьте свои данные и попробуйте снова.';

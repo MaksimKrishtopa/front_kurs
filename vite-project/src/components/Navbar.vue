@@ -104,7 +104,6 @@ export default {
 }
 
 .navbar__right li {
-  margin-right: 20px;
 }
 
 .navbar__right li:hover {
@@ -130,12 +129,20 @@ a:hover {
   justify-content: center;
 }
 
+.account__authorize-links a>p {
+  padding-top: 5px;
+}
+
 .account__authorize-links a:hover {
   text-shadow: none;
 }
 
 .account__authorize-links:hover{
   filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.5));
+}
+
+.logout__link {
+  padding-bottom: 35px;
 }
 
 .logout__link:hover {

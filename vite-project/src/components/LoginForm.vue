@@ -12,7 +12,7 @@
       </div>
       <p v-if="loginError" class="error-message">{{ loginError }}</p>
       <button type="submit">Войти</button>
-      <router-link to="/register">Зарегистрироваться</router-link>
+      <router-link to="/register">Первый раз на сайте?</router-link>
     </form>
   </div>
 </template>
@@ -96,8 +96,11 @@ export default {
   }
 
   a {
-    padding-top: 5px;
+    padding-top: 10px;
     color: #fff;
+    font-size: 20px;
+    border-bottom: 2.5px solid #fff;
+    
   }
 
   button {

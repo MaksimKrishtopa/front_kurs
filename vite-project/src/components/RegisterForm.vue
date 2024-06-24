@@ -184,10 +184,9 @@ export default {
   }
 
   form > a {
-    padding-top: 10px;
     color: #fff;
     font-size: 20px;
-    text-decoration: underline;
+    border-bottom: 2.5px solid #fff;
   }
 
   .gender_dob {

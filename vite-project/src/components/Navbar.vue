@@ -11,11 +11,15 @@
         </ul>
       </div>
       <ul class="navbar__right">
-        <li v-if="isAuthenticated"><router-link to="/profile">Личный кабинет</router-link></li>
-        <li v-else><router-link to="/login">Вход</router-link></li>
-        <li v-if="isAuthenticated" @click="logout"><img src="../assets/logout-icon.svg" alt="logout-icon"></li>
-        
-        <li v-else><router-link to="/register">Регистрация</router-link></li>
+        <li class="account__authorize-links">
+          <router-link :to="accountLink">
+            <img src="../assets/acc-icon.svg" alt="account-icon">
+            <p>Личный кабинет</p>
+          </router-link>
+        </li>
+        <li class="logout__link" v-if="isAuthenticated" @click="logout">
+          <img src="../assets/logout-icon.svg" alt="logout-icon">
+        </li>
       </ul>
     </div>
   </nav>
@@ -29,6 +33,9 @@ export default {
     ...mapGetters(['userToken', 'userData']),
     isAuthenticated() {
       return !!this.userToken
+    },
+    accountLink() {
+      return this.isAuthenticated ? '/profile' : '/login'
     }
   },
   methods: {
@@ -96,6 +103,10 @@ export default {
   padding: 0;
 }
 
+.navbar__right li {
+  margin-right: 20px;
+}
+
 .navbar__right li:hover {
   cursor: pointer;
 }
@@ -111,4 +122,24 @@ a:hover {
 .router-link-active {
   border-bottom: 3px solid #fff; 
 }
+
+.account__authorize-links a{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.account__authorize-links a:hover {
+  text-shadow: none;
+}
+
+.account__authorize-links:hover{
+  filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.5));
+}
+
+.logout__link:hover {
+  filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.5));
+}
+
 </style>

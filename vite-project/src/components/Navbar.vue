@@ -5,9 +5,12 @@
         <div class="navbar__logo">
           <img src="../assets/logo.png" alt="Логотип" class="logo">
         </div>
-        <ul>
+        <ul v-if="isUser">
           <li><router-link to="/">Главная</router-link></li>
           <li><router-link to="/appointments">Запись</router-link></li>
+        </ul>
+        <ul v-else-if="isAdmin">
+          <li><router-link to="/admin">Админ</router-link></li>
         </ul>
       </div>
       <ul class="navbar__right">
@@ -36,6 +39,12 @@ export default {
     },
     accountLink() {
       return this.isAuthenticated ? '/profile' : '/login'
+    },
+    isAdmin() {
+      return this.userData && this.userData.role_id === 1;
+    },
+    isUser() {
+      return this.userData && this.userData.role_id !== 1;
     }
   },
   methods: {

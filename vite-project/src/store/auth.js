@@ -61,6 +61,29 @@ const store = createStore({
         return false
       }
     },
+
+    async registration({ commit, state }, userData) {
+      try {
+        const response = await fetch(state.api_url + 'registration', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userData)
+        })
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const data = await response.json()
+        if (data.status) {
+          return true
+        }
+        return false
+      } catch (error) {
+        console.error('Registration error:', error)
+        throw error
+      }
+    },
     async fetchUser({ commit, state }) {
       try {
         const response = await fetch(state.api_url + 'profile', {

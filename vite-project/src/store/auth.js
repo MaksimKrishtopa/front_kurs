@@ -38,7 +38,7 @@ const store = createStore({
     }
   },
   actions: {
-    async login({ commit, state }, credentials) {
+    async login({ commit, dispatch, state }, credentials) {
       try {
         const response = await fetch(state.api_url + 'login', {
           method: 'POST',
@@ -53,6 +53,15 @@ const store = createStore({
         const res = await response.json()
         if (res.status) {
           commit('updateUserToken', res.token.split('|')[1])
+          commit('updateUserData', res.data) // Сохраняем данные пользователя
+
+          // Проверка наличия и значения role_id
+          if (res.data && res.data.role_id && res.data.role_id !== 1) {
+            await dispatch('fetchUser') // Запрашиваем профиль только для обычных пользователей
+          } else {
+            console.log('Администратор авторизован, профиль не требуется')
+          }
+
           return true
         }
         return false
@@ -84,8 +93,14 @@ const store = createStore({
         throw error
       }
     },
+
     async fetchUser({ commit, state }) {
       try {
+        if (state.user_data && state.user_data.role_id === 1) {
+          console.log('Запрос профиля для администратора не требуется');
+          return;
+        }
+
         const response = await fetch(state.api_url + 'profile', {
           method: 'GET',
           headers: {
@@ -96,12 +111,14 @@ const store = createStore({
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         const data = await response.json()
+        console.log('Fetched user data:', data.data);
         commit('updateUserData', data.data)
       } catch (error) {
         console.error('Fetch user error:', error)
         commit('clearUserToken')
       }
     },
+
     logout({ commit }) {
       commit('clearUserToken')
     }

@@ -12,7 +12,7 @@ const routes = [
   { path: '/', component: HomeView },
   { path: '/login', component: LoginView },
   { path: '/register', component: RegisterView },
-  { path: '/appointments', component: AppointmentsView },
+  { path: '/appointments', component: AppointmentsView, meta: { requiresAuth: true } }, // добавляем requiresAuth
   { path: '/appointment-form', component: AppointmentForm },
   { path: '/profile', component: ProfileView },
   {
@@ -30,9 +30,19 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const user = store.getters.userData;
   const isAuthenticated = !!store.getters.userToken;
+  
+  console.log("Checking route access:", to.path);
+  console.log("User role_id:", user ? user.role_id : 'undefined');  // Добавлено: вывод роли пользователя
 
   if (to.matched.some(record => record.meta.requiresAdmin)) {
     if (isAuthenticated && user.role_id === 1) {
+      next();
+    } else {
+      console.warn("Access denied. Admin rights required.");
+      next('/login');
+    }
+  } else if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (isAuthenticated) {
       next();
     } else {
       next('/login');
@@ -42,4 +52,4 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-export default router
+export default router;

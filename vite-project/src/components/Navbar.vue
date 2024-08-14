@@ -5,7 +5,7 @@
         <div class="navbar__logo">
           <img src="../assets/logo.png" alt="Логотип" class="logo">
         </div>
-        <ul>
+        <ul v-if="!isAdmin">
           <li><router-link to="/">Главная</router-link></li>
           <li><router-link to="/appointments" >Запись</router-link></li>
         </ul>
@@ -14,7 +14,7 @@
         </ul>
       </div>
       <ul class="navbar__right">
-        <li class="account__authorize-links">
+        <li v-if="!isAdmin" class="account__authorize-links">
           <router-link :to="accountLink">
             <img src="../assets/acc-icon.svg" alt="account-icon">
             <p>Личный кабинет</p>
@@ -24,6 +24,7 @@
           <img src="../assets/logout-icon.svg" alt="logout-icon">
         </li>
       </ul>
+
     </div>
   </nav>
 </template>

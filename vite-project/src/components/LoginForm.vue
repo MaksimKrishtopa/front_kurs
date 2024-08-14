@@ -32,30 +32,31 @@ export default {
     const loginError = ref(null);
 
     const login = async () => {
-    const credentials = {
-      email: email.value,
-      password: password.value
-    };
-
-    try {
-      const response = await store.dispatch('login', credentials);
-      if (response) {
-        console.log('Login successful');
-        await store.dispatch('fetchUser');
-        const user = store.getters.userData;
-        if (user.role_id === 1) {
-          router.push('/admin');
-        } else {
-          router.push('/');
-        }
-      } else {
-        loginError.value = 'Ошибка при входе. Пожалуйста, проверьте свои данные и попробуйте снова.';
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      loginError.value = 'Ошибка при входе. Пожалуйста, проверьте свои данные и попробуйте снова.';
-    }
+  const credentials = {
+    email: email.value,
+    password: password.value,
   };
+
+  try {
+    const response = await store.dispatch("login", credentials);
+    if (response) {
+      console.log("Login successful");
+      await store.dispatch("fetchUser");
+      const user = store.getters.userData;
+      console.log("User role_id:", user.role_id);  // Добавлено: вывод роли пользователя
+      if (user.role_id === 1) {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
+    } else {
+      loginError.value = "Ошибка при входе. Пожалуйста, проверьте свои данные и попробуйте снова.";
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    loginError.value = "Ошибка при входе. Пожалуйста, проверьте свои данные и попробуйте снова.";
+  }
+};
 
     return {
       email,

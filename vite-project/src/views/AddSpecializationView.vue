@@ -1,37 +1,54 @@
 <template>
-    <div>
-      <h1>Добавить специализацию</h1>
-      <form @submit.prevent="submitForm">
-        <label for="name">Название специализации:</label>
-        <input type="text" v-model="form.name" id="name" required />
-  
-        <button type="submit">Сохранить</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        form: {
-          name: ''
+  <div>
+    <h1>Add Specialization</h1>
+    <SpecializationForm @submit="handleAddSpecialization" />
+  </div>
+</template>
+
+<script>
+import SpecializationForm from '../components/SpecializationForm.vue';
+
+export default {
+  components: { SpecializationForm },
+  methods: {
+    async handleAddSpecialization(specializationData) {
+      try {
+        const response = await fetch('http://localhost:80/api/specializations/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(specializationData),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to add specialization: ' + response.statusText);
         }
-      };
-    },
-    methods: {
-      submitForm() {
-        axios.post('http://localhost:80/api/specializations/create', this.form)
-          .then(response => {
-            this.$router.push('/doctors');
-          })
-          .catch(error => {
-            console.error("Ошибка при создании специализации:", error);
-          });
+
+        const newSpecialization = await response.json();
+        console.log('Specialization added:', newSpecialization);
+        this.$router.push('/specializations'); // Перенаправление на список специализаций после добавления
+      } catch (error) {
+        console.error(error.message);
       }
-    }
-  };
-  </script>
-  
+    },
+  },
+};
+</script>
+
+
+<style scoped>
+
+  main {
+    background-color: black;
+  }
+
+  form {
+    background-color: black;
+  }
+
+  h1 {
+    background-color: black;
+  }
+
+</style>

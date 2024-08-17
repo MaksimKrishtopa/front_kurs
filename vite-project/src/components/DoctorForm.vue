@@ -23,7 +23,7 @@
   
       const addDoctor = async () => {
         try {
-          await fetch('http://localhost:8000/api/doctors', {
+          await fetch('http://localhost:80/api/doctors', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

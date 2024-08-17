@@ -11,6 +11,9 @@
         </ul>
         <ul v-if="isAdmin">
           <li><router-link to="/doctors">Врачи</router-link></li>
+          <li><router-link to="/specializations/add">Добавить специализацию</router-link></li>
+          <li><router-link to="/schedules/add">Добавить расписание</router-link></li>
+          <li><router-link to="/doctors/add">Добавить врача</router-link></li>
         </ul>
       </div>
       <ul class="navbar__right">
@@ -24,7 +27,6 @@
           <img src="../assets/logout-icon.svg" alt="logout-icon">
         </li>
       </ul>
-
     </div>
   </nav>
 </template>

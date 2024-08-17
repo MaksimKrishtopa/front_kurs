@@ -7,11 +7,11 @@ import AppointmentForm from '../views/AppointmentForm.vue'
 import ProfileView from '../views/ProfileView.vue'
 import AdminView from '../views/AdminView.vue'
 import store from '../store/auth.js'
-import DoctorsView from '..//views/DoctorsView.vue';
 import AddDoctorView from '../views/AddDoctorView.vue';
 import EditDoctorView from '../views/EditDoctorView.vue';
-import AddSpecializationView from '../views/AddSpecializationView.vue';
+import DoctorsView from '../views/DoctorsView.vue';
 import AddScheduleView from '../views/AddScheduleView.vue';
+import AddSpecializationView from '../views/AddSpecializationView.vue';
 
 const routes = [
   { path: '/', component: HomeView },
@@ -25,32 +25,11 @@ const routes = [
     component: AdminView,
     meta: { requiresAdmin: true }
   },
-  {
-    path: '/doctors',
-    name: 'doctors',
-    component: DoctorsView
-  },
-  {
-    path: '/doctor/add',
-    name: 'addDoctor',
-    component: AddDoctorView
-  },
-  {
-    path: '/doctor/edit/:id',
-    name: 'editDoctor',
-    component: EditDoctorView,
-    props: true
-  },
-  {
-    path: '/specialization/add',
-    name: 'addSpecialization',
-    component: AddSpecializationView
-  },
-  {
-    path: '/schedule/add',
-    name: 'addSchedule',
-    component: AddScheduleView
-  },
+  { path: '/doctors', name: 'doctors', component: DoctorsView },
+  { path: '/doctors/add', name: 'add-doctor', component: AddDoctorView },
+  { path: '/doctors/edit/:id', name: 'edit-doctor', component: EditDoctorView },
+  { path: '/schedules/add', name: 'add-schedule', component: AddScheduleView },
+  { path: '/specializations/add', name: 'add-specialization', component: AddSpecializationView },
 ]
 
 const router = createRouter({

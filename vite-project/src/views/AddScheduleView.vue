@@ -1,58 +1,53 @@
 <template>
-    <div>
-      <h1>Добавить график работы врача</h1>
-      <form @submit.prevent="submitForm">
-        <label for="date_and_time">Дата и время:</label>
-        <input type="datetime-local" v-model="form.date_and_time" id="date_and_time" required />
-  
-        <label for="doctor_id">Врач:</label>
-        <select v-model="form.doctor_id" id="doctor_id" required>
-          <option v-for="doctor in doctors" :key="doctor.id" :value="doctor.id">
-            {{ doctor.name }} {{ doctor.surname }}
-          </option>
-        </select>
-  
-        <button type="submit">Сохранить</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        form: {
-          date_and_time: '',
-          doctor_id: ''
-        },
-        doctors: []
-      };
-    },
-    methods: {
-      fetchDoctors() {
-        axios.get('http://localhost:80/api/doctors')
-          .then(response => {
-            this.doctors = response.data;
-          })
-          .catch(error => {
-            console.error("Ошибка при получении списка врачей:", error);
-          });
-      },
-      submitForm() {
-        axios.post('http://localhost:80/api/graph/create', this.form)
-          .then(response => {
-            this.$router.push('/doctors');
-          })
-          .catch(error => {
-            console.error("Ошибка при создании графика:", error);
-          });
+  <div>
+    <h1>Add Schedule</h1>
+    <ScheduleForm @submit="handleAddSchedule" />
+  </div>
+</template>
+
+<script>
+import ScheduleForm from '../components/ScheduleForm.vue';
+
+export default {
+  components: { ScheduleForm },
+  methods: {
+    async handleAddSchedule(scheduleData) {
+      try {
+        const response = await fetch('/api/schedules', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(scheduleData),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to add schedule: ' + response.statusText);
+        }
+
+        const newSchedule = await response.json();
+        console.log('Schedule added:', newSchedule);
+        this.$router.push('/schedules'); // Перенаправление на список расписаний после добавления
+      } catch (error) {
+        console.error(error.message);
       }
     },
-    created() {
-      this.fetchDoctors();
-    }
-  };
-  </script>
-  
+  },
+};
+</script>
+
+<style scoped>
+
+  main {
+    background-color: black;
+  }
+
+  form {
+    background-color: black;
+  }
+
+  h1 {
+    background-color: black;
+  }
+
+</style>

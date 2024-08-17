@@ -10,7 +10,7 @@
           <li><router-link to="/appointments" >Запись</router-link></li>
         </ul>
         <ul v-if="isAdmin">
-          <li><router-link to="/admin">Админ</router-link></li>
+          <li><router-link to="/doctors">Врачи</router-link></li>
         </ul>
       </div>
       <ul class="navbar__right">

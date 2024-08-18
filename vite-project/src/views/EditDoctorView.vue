@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Edit Doctor</h1>
+  <div class="container">
+    <h1>Редактирование данных врача</h1>
     <DoctorForm :doctor="doctor" @submit="handleEditDoctor" />
   </div>
 </template>
@@ -45,9 +45,7 @@ export default {
           throw new Error('Failed to update doctor: ' + response.statusText);
         }
 
-        const updatedDoctor = await response.json();
-        console.log('Doctor updated:', updatedDoctor);
-        this.$router.push('/doctors'); // Перенаправление на список врачей после обновления
+        this.$router.push('/doctors');
       } catch (error) {
         console.error(error.message);
       }
@@ -57,17 +55,16 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  background-color: #189AB4;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 50px auto;
+}
 
-  main {
-    background-color: black;
-  }
-
-  form {
-    background-color: black;
-  }
-
-  h1 {
-    background-color: black;
-  }
-
+h1 {
+  text-align: center;
+  color: white;
+}
 </style>

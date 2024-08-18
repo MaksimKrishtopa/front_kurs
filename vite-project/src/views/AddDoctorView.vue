@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <h1>Add Doctor</h1>
+  <div class="container">
+    <div class="header">
+      <div class="header-item">+ Врача</div>
+      <h1>Добавление врача</h1>
+      <div class="header-item">+ Специализацию</div>
+    </div>
     <DoctorForm @submit="handleAddDoctor" />
   </div>
 </template>
@@ -26,8 +30,7 @@ export default {
         }
 
         const newDoctor = await response.json();
-        console.log('Doctor added:', newDoctor);
-        this.$router.push('/doctors'); // Перенаправление на список врачей после добавления
+        this.$router.push('/doctors');
       } catch (error) {
         console.error(error.message);
       }
@@ -36,21 +39,28 @@ export default {
 };
 </script>
 
-
 <style scoped>
+.container {
+  background-color: #189AB4;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 50px auto;
+}
 
-  main {
-    background-color: black;
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  form {
-    background-color: black;
-  }
+.header h1 {
+  color: white;
+}
 
-  h1 {
-    background-color: black;
-  }
-
-  
-
+.header-item {
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
 </style>

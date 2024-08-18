@@ -4,11 +4,7 @@
         <label for="name">Specialization Name:</label>
         <input type="text" v-model="formData.name" required />
       </div>
-  
-      <div>
-        <label for="description">Description:</label>
-        <textarea v-model="formData.description" required></textarea>
-      </div>
+
   
       <button type="submit">Add Specialization</button>
     </form>

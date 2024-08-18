@@ -14,16 +14,6 @@
         <input type="date" v-model="formData.date" required />
       </div>
   
-      <div>
-        <label for="time">Time:</label>
-        <input type="time" v-model="formData.time" required />
-      </div>
-  
-      <div>
-        <label for="duration">Duration (minutes):</label>
-        <input type="number" v-model="formData.duration" required />
-      </div>
-  
       <button type="submit">Add Schedule</button>
     </form>
   </template>

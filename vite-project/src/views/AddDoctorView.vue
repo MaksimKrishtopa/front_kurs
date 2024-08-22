@@ -17,7 +17,7 @@ export default {
   methods: {
     async handleAddDoctor(doctorData) {
       try {
-        const response = await fetch('/api/doctors', {
+        const response = await fetch('http://localhost:80/api/doctors/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -26,10 +26,9 @@ export default {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to add doctor: ' + response.statusText);
+          throw new Error('Не удалось добавить врача: ' + response.statusText);
         }
 
-        const newDoctor = await response.json();
         this.$router.push('/doctors');
       } catch (error) {
         console.error(error.message);

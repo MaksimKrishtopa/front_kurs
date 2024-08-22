@@ -6,6 +6,7 @@
       <div class="header-item">+ Специализацию</div>
     </div>
     <SpecializationForm @submit="handleAddSpecialization" />
+
   </div>
 </template>
 
@@ -14,27 +15,30 @@ import SpecializationForm from '../components/SpecializationForm.vue';
 
 export default {
   components: { SpecializationForm },
-  methods: {
-    async handleAddSpecialization(specializationData) {
-      try {
-        const response = await fetch('http://localhost:80/api/specializations/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(specializationData),
-        });
+  data() {
+    return {
 
-        if (!response.ok) {
-          throw new Error('Failed to add specialization: ' + response.statusText);
-        }
-
-        this.$router.push('/specializations');
-      } catch (error) {
-        console.error(error.message);
-      }
-    },
+    };
   },
+  methods: {
+  async handleAddSpecialization(specializationData) {
+    console.log('Sending specialization data:', specializationData); 
+
+    try {
+      const response = await fetch('http://localhost:80/api/specializations/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": 'Bearer ' + this.$store.getters.userToken,
+        },
+        body: JSON.stringify(specializationData),
+      });
+
+
+    } catch (error) {
+    }
+  },
+},
 };
 </script>
 
@@ -61,5 +65,15 @@ export default {
   color: white;
   font-size: 18px;
   cursor: pointer;
+}
+
+.error-message {
+  color: red;
+  margin-top: 20px;
+}
+
+.success-message {
+  color: green;
+  margin-top: 20px;
 }
 </style>

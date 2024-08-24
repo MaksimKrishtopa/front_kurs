@@ -14,7 +14,11 @@
     </div>
     <div>
       <label for="gender">Пол:</label>
-      <input type="text" id="gender" v-model="gender" required />
+      <select id="gender" v-model="gender" required>
+        <option value="" disabled>Выберите пол</option>
+        <option value="Мужской">Мужской</option>
+        <option value="Женский">Женский</option>
+      </select>
     </div>
     <div>
       <label for="date_of_birth">Дата рождения:</label>
@@ -29,39 +33,50 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref } from 'vue';
+import { useStore } from 'vuex'; // Импортируем useStore
 
 export default {
   name: 'DoctorForm',
   setup() {
-    const surname = ref('')
-    const name = ref('')
-    const patronymic = ref('')
-    const gender = ref('')
-    const date_of_birth = ref('')
-    const specialization_id = ref('')
+    const store = useStore(); // Получаем доступ к store
+    
+    const surname = ref('');
+    const name = ref('');
+    const patronymic = ref('');
+    const gender = ref('');
+    const date_of_birth = ref('');
+    const specialization_id = ref('');
 
     const addDoctor = async () => {
       try {
-        await fetch('http://localhost:80/api/doctors/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            surname: surname.value,
-            name: name.value,
-            patronymic: patronymic.value,
-            gender: gender.value,
-            date_of_birth: date_of_birth.value,
-            specialization_id: specialization_id.value
-          })
-        })
-        alert('Врач успешно добавлен!')
-      } catch (error) {
-        console.error('Ошибка при добавлении врача:', error)
-      }
+    const response = await fetch('http://localhost:80/api/doctors/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": 'Bearer ' + store.getters.userToken,
+      },
+      body: JSON.stringify({
+        surname: surname.value,
+        name: name.value,
+        patronymic: patronymic.value,
+        gender: gender.value, // Передаем строковое значение
+        date_of_birth: date_of_birth.value,
+        specialization_id: Number(specialization_id.value),
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Ошибка:', errorData);
+      throw new Error('Не удалось добавить врача: ' + response.statusText);
     }
+
+    alert('Врач успешно добавлен!');
+  } catch (error) {
+    console.error('Ошибка при добавлении врача:', error);
+  }
+    };
 
     return {
       surname,
@@ -71,10 +86,12 @@ export default {
       date_of_birth,
       specialization_id,
       addDoctor
-    }
+    };
   }
-}
+};
 </script>
+
+
   
   <style scoped>
   </style>

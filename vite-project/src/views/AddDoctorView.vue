@@ -21,6 +21,7 @@ export default {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + this.$store.getters.userToken,
           },
           body: JSON.stringify(doctorData),
         });

@@ -10,8 +10,8 @@
     <div class="doctors-list-container">
       <div class="doctor-column" v-for="n in 3" :key="n">
         <div v-for="doctor in doctors" :key="doctor.id" class="doctor-item">
-          {{ doctor.name }}, {{ doctor.specialization }}
-          <button @click="editDoctor(doctor.id)" class="edit-button">✎</button>
+          {{ doctor.surname }} {{ doctor.name }}, {{ doctor.specialization.name }}
+          <button @click="editDoctor(doctor.id)" class="edit-button"> - Редактировать</button>
         </div>
       </div>
     </div>
@@ -31,17 +31,29 @@ export default {
   methods: {
     async fetchDoctors() {
       try {
+        console.log("Fetching doctors...");
         const response = await fetch('http://localhost:80/api/doctors', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + this.$store.getters.userToken,
           },
         });
+
+        console.log("Response status:", response.status);
 
         if (!response.ok) {
           throw new Error('Failed to fetch doctors: ' + response.statusText);
         }
-        this.doctors = await response.json();
+
+        const data = await response.json();
+        
+        if (data && data.data) {
+          this.doctors = data.data;
+        } else {
+          console.warn("No doctors data found in response.");
+        }
+
       } catch (error) {
         console.error(error.message);
       }

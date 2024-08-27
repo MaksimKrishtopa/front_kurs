@@ -17,10 +17,11 @@ export default {
   methods: {
     async handleAddSchedule(scheduleData) {
       try {
-        const response = await fetch('/api/schedules', {
+        const response = await fetch('http://localhost:80/api/graph/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + this.$store.getters.userToken,
           },
           body: JSON.stringify(scheduleData),
         });

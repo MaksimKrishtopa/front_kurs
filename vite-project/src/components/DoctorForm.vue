@@ -60,12 +60,12 @@ export default {
         surname: surname.value,
         name: name.value,
         patronymic: patronymic.value,
-        gender: gender.value, // Передаем строковое значение
+        gender: gender.value,
         date_of_birth: date_of_birth.value,
         specialization_id: Number(specialization_id.value),
       }),
     });
-
+ 
     if (!response.ok) {
       const errorData = await response.json();
       console.error('Ошибка:', errorData);

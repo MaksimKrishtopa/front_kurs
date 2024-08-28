@@ -15,30 +15,36 @@ import ScheduleForm from '../components/ScheduleForm.vue';
 export default {
   components: { ScheduleForm },
   methods: {
-    async handleAddSchedule(scheduleData) {
-      try {
-        const response = await fetch('http://localhost:80/api/graph/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": 'Bearer ' + this.$store.getters.userToken,
-          },
-          body: JSON.stringify(scheduleData),
-        });
+  async handleAddSchedule(scheduleData) {
+    try {
+      const response = await fetch('http://localhost:80/api/graph/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": 'Bearer ' + this.$store.getters.userToken,
+        },
+        body: JSON.stringify({
+          doctor_id: scheduleData.doctorId,
+          date_and_time: scheduleData.date_and_time, // ISO формат
+        }),
+      });
 
-        if (!response.ok) {
-          throw new Error('Failed to add schedule: ' + response.statusText);
-        }
-
-        const newSchedule = await response.json();
-        this.$router.push('/schedules'); // Перенаправление на список расписаний после добавления
-      } catch (error) {
-        console.error(error.message);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Ошибка:', errorData);
+        throw new Error('Не удалось добавить расписание: ' + errorData.message);
       }
-    },
+
+      alert('Расписание успешно добавлено!');
+      this.$router.push('/schedules');
+    } catch (error) {
+      console.error('Ошибка при добавлении расписания:', error);
+    }
   },
+},
 };
 </script>
+
 
 <style scoped>
 .container {

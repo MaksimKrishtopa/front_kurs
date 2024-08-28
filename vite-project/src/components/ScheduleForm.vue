@@ -1,17 +1,18 @@
 <template>
-  <form @submit.prevent="addSchedule">
+  <form @submit.prevent="handleSubmit">
     <div>
       <label for="doctor">Doctor:</label>
-      <select style="background-color: black" v-model="doctorId" required>
+      <select v-model="formData.doctorId" required>
+        <option value="" disabled>Выберите врача</option>
         <option v-for="doctor in doctors" :key="doctor.id" :value="doctor.id">
           {{ doctor.surname }} {{ doctor.name }} {{ doctor.patronymic }}
         </option>
       </select>
     </div>
-
+    
     <div>
-      <label for="date">Date:</label>
-      <input type="date" v-model="date" required />
+      <label for="date_and_time">Date and Time:</label>
+      <input type="datetime-local" v-model="formData.date_and_time" required />
     </div>
 
     <button type="submit">Add Schedule</button>
@@ -19,73 +20,44 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-import { useStore } from 'vuex';
-
 export default {
-  name: 'ScheduleForm',
-  setup() {
-    const store = useStore();
-
-    const doctorId = ref('');
-    const date = ref('');
-    const doctors = ref([]);
-
-    const fetchDoctors = async () => {
-      try {
-        const response = await fetch('http://localhost:80/api/doctors', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + store.getters.userToken,
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch doctors: ' + response.statusText);
-        }
-        doctors.value = await response.json();
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-
-    const addSchedule = async () => {
-      try {
-        const response = await fetch('http://localhost:80/api/graph/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + store.getters.userToken,
-          },
-          body: JSON.stringify({
-            doctorId: doctorId.value,
-            date: date.value,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Ошибка:', errorData);
-          throw new Error('Не удалось добавить расписание: ' + response.statusText);
-        }
-
-        alert('Расписание успешно добавлено!');
-      } catch (error) {
-        console.error('Ошибка при добавлении расписания:', error);
-      }
-    };
-
-    onMounted(fetchDoctors);
-
+  props: {
+    initialData: {
+      type: Object,
+      default: () => ({
+        doctorId: '',
+        date_and_time: '',
+      }),
+    },
+  },
+  data() {
     return {
-      doctorId,
-      date,
-      doctors,
-      addSchedule,
+      formData: { ...this.initialData },
+      doctors: [],
     };
+  },
+  async created() {
+    try {
+      const response = await fetch('http://localhost:80/api/doctors', {
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": 'Bearer ' + this.$store.getters.userToken,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch doctors: ' + response.statusText);
+      }
+      const doctorsData = await response.json();
+      this.doctors = doctorsData.data;
+    } catch (error) {
+      console.error('Ошибка при загрузке данных врачей:', error.message);
+    }
+  },
+  methods: {
+    handleSubmit() {
+      const dateTime = `${this.formData.date}T${this.formData.time}:00`; // Форматирование в ISO строку
+      this.$emit('submit', { ...this.formData, date_and_time: dateTime });
+    },
   },
 };
 </script>
-
-<style scoped>
-/* Добавьте свои стили здесь */
-</style>

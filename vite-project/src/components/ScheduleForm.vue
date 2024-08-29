@@ -55,8 +55,8 @@ export default {
   },
   methods: {
     handleSubmit() {
-      const dateTime = `${this.formData.date}T${this.formData.time}:00`; // Форматирование в ISO строку
-      this.$emit('submit', { ...this.formData, date_and_time: dateTime });
+      // Дата и время уже в правильном формате, поэтому просто отправляем как есть
+      this.$emit('submit', { ...this.formData });
     },
   },
 };

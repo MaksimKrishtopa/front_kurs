@@ -15,33 +15,34 @@ import ScheduleForm from '../components/ScheduleForm.vue';
 export default {
   components: { ScheduleForm },
   methods: {
-  async handleAddSchedule(scheduleData) {
-    try {
-      const response = await fetch('http://localhost:80/api/graph/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": 'Bearer ' + this.$store.getters.userToken,
-        },
-        body: JSON.stringify({
-          doctor_id: scheduleData.doctorId,
-          date_and_time: scheduleData.date_and_time, // ISO формат
-        }),
-      });
+    async handleAddSchedule(scheduleData) {
+      try {
+        const response = await fetch('http://localhost:80/api/graph/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + this.$store.getters.userToken,
+          },
+          body: JSON.stringify({
+            doctor_id: scheduleData.doctorId,
+            date_and_time: scheduleData.date_and_time,
+          }),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Ошибка:', errorData);
-        throw new Error('Не удалось добавить расписание: ' + errorData.message);
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Ошибка сервера:', errorData);
+          alert('Ошибка при создании расписания: ' + JSON.stringify(errorData.errors));
+          throw new Error('Не удалось добавить расписание: ' + errorData.message);
+        }
+
+        alert('Расписание успешно добавлено!');
+        this.$router.push('/schedules');
+      } catch (error) {
+        console.error('Ошибка при добавлении расписания:', error);
       }
-
-      alert('Расписание успешно добавлено!');
-      this.$router.push('/schedules');
-    } catch (error) {
-      console.error('Ошибка при добавлении расписания:', error);
-    }
+    },
   },
-},
 };
 </script>
 

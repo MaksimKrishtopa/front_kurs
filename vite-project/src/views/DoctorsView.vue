@@ -8,10 +8,10 @@
       <button @click="addSpecialization" class="add-button"><strong>+</strong> Специализацию</button>
     </div>
     <div class="doctors-list-container">
-      <div class="doctor-column" v-for="n in 3" :key="n">
-        <div v-for="doctor in doctors" :key="doctor.id" class="doctor-item">
+      <div class="doctor-column" v-for="(column, index) in doctorColumns" :key="index">
+        <div v-for="doctor in column" :key="doctor.id" class="doctor-item">
           {{ doctor.surname }} {{ doctor.name }}, {{ doctor.specialization.name }}
-          <button @click="editDoctor(doctor.id)" class="edit-button"> - Редактировать</button>
+          <button @click="editDoctor(doctor.id)" class="edit-button"><img src="../assets/Vector.svg" alt="edit"></button>
         </div>
       </div>
     </div>
@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       doctors: [],
+      doctorColumns: [[], [], []],  // Три колонки для равномерного распределения
     };
   },
   async created() {
@@ -31,7 +32,6 @@ export default {
   methods: {
     async fetchDoctors() {
       try {
-        console.log("Fetching doctors...");
         const response = await fetch('http://localhost:80/api/doctors', {
           method: 'GET',
           headers: {
@@ -39,8 +39,6 @@ export default {
             "Authorization": 'Bearer ' + this.$store.getters.userToken,
           },
         });
-
-        console.log("Response status:", response.status);
 
         if (!response.ok) {
           throw new Error('Failed to fetch doctors: ' + response.statusText);
@@ -50,6 +48,7 @@ export default {
         
         if (data && data.data) {
           this.doctors = data.data;
+          this.distributeDoctors();
         } else {
           console.warn("No doctors data found in response.");
         }
@@ -57,6 +56,12 @@ export default {
       } catch (error) {
         console.error(error.message);
       }
+    },
+    distributeDoctors() {
+      this.doctorColumns = [[], [], []];
+      this.doctors.forEach((doctor, index) => {
+        this.doctorColumns[index % 3].push(doctor); // Распределяем по трем колонкам
+      });
     },
     editDoctor(id) {
       this.$router.push({ name: 'edit-doctor', params: { id } });
@@ -122,9 +127,11 @@ export default {
 }
 
 .doctor-column {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-right: 10px;
 }
 
 .doctor-item {
@@ -136,15 +143,12 @@ export default {
   margin: 10px 0;
 }
 
-.edit-button {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 18px;
+button > img {
+  margin-left: 10px;
   cursor: pointer;
 }
 
-.edit-button:hover {
-  color: #ffeb3b;
+button > img:hover {
+  filter: drop-shadow(1px 1px 1px #ffffff8a);
 }
 </style>

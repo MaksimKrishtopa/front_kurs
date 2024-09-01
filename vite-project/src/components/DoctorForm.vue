@@ -1,34 +1,44 @@
 <template>
   <form @submit.prevent="addDoctor">
-    <div>
-      <label for="surname">Фамилия:</label>
-      <input type="text" id="surname" v-model="surname" required />
+    <div class="form__container">
+      <div class="form__field">
+        <label for="surname">Фамилия:</label>
+        <input type="text" id="surname" v-model="surname" required />
+      </div>
+      <div class="form__field">
+        <label for="name">Имя:</label>
+        <input type="text" id="name" v-model="name" required />
+      </div>
+      <div class="form__field">
+        <label for="patronymic">Отчество:</label>
+        <input type="text" id="patronymic" v-model="patronymic" required />
+      </div>
+      <div class="form__field">
+        <label for="gender">Пол:</label>
+        <select id="gender" v-model="gender" required>
+          <option value="" disabled>Выберите пол</option>
+          <option value="Мужской">Мужской</option>
+          <option value="Женский">Женский</option>
+        </select>
+      </div>
+      <div class="form__field">
+        <label for="date_of_birth">Дата рождения:</label>
+        <input type="date" id="date_of_birth" v-model="date_of_birth" required />
+      </div>
+      <div class="form__field">
+        <label for="specialization_id">Специализация:</label>
+        <select id="specialization_id" v-model="specialization_id" required>
+          <option value="" disabled>Выберите специализацию</option>
+          <!-- Варианты специализаций должны быть загружены динамически -->
+          <option v-for="specialization in specializations" :key="specialization.id" :value="specialization.id">
+            {{ specialization.name }}
+          </option>
+        </select>
+      </div>
     </div>
-    <div>
-      <label for="name">Имя:</label>
-      <input type="text" id="name" v-model="name" required />
+    <div class="form__actions">
+      <button type="submit">Редактировать</button>
     </div>
-    <div>
-      <label for="patronymic">Отчество:</label>
-      <input type="text" id="patronymic" v-model="patronymic" required />
-    </div>
-    <div>
-      <label for="gender">Пол:</label>
-      <select id="gender" v-model="gender" required>
-        <option value="" disabled>Выберите пол</option>
-        <option value="Мужской">Мужской</option>
-        <option value="Женский">Женский</option>
-      </select>
-    </div>
-    <div>
-      <label for="date_of_birth">Дата рождения:</label>
-      <input type="date" id="date_of_birth" v-model="date_of_birth" required />
-    </div>
-    <div>
-      <label for="specialization_id">ID специализации:</label>
-      <input type="number" id="specialization_id" v-model="specialization_id" required />
-    </div>
-    <button type="submit">Добавить врача</button>
   </form>
 </template>
 
@@ -89,10 +99,57 @@ export default {
     };
   }
 };
+
 </script>
 
+<style scoped>
+label {
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 10px;
+}
 
-  
-  <style scoped>
-  </style>
-  
+input, select {
+  background-color: #fff;
+  color: #343434;
+  padding: 5px;
+  font-size: 20px;
+  border-radius: 5px;
+}
+
+.form__container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 40px;
+  border-radius: 10px;
+  gap: 15px;
+  background-color: #239AB5;
+}
+
+.form__field {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+button {
+  background-color: #fff;
+  color: #239AB5;
+  cursor: pointer;
+  padding: 12px 24px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 20px;
+  border: none;
+}
+
+button:hover {
+  background-color: #e0f7fa;
+}
+</style>

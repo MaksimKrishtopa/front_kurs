@@ -94,7 +94,7 @@ export default {
 
 .header-title {
   color: white;
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
 }
 

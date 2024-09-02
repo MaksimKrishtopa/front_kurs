@@ -71,6 +71,24 @@ const store = createStore({
       }
     },
 
+    async fetchSpecializations({ state }) {
+      try {
+        const response = await fetch(`${state.api_url}doctors/create`, {
+          headers: {
+            'Authorization': `Bearer ${state.user_token}`
+          }
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.specializations; // предполагаем, что API возвращает специализации в таком формате
+      } catch (error) {
+        console.error('Fetch specializations error:', error);
+        throw error;
+      }
+    },
+
     async registration({ commit, state }, userData) {
       try {
         const response = await fetch(state.api_url + 'registration', {

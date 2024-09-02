@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>Редактирование данных врача</h1>
-    <DoctorForm :doctor="doctor" @submit="handleEditDoctor" />
+    <DoctorForm :doctor="doctor" :specializations="specializations" :isEditMode="true" @submit="handleEditDoctor" />
   </div>
 </template>
 
@@ -13,30 +13,41 @@ export default {
   data() {
     return {
       doctor: null,
+      specializations: [],
     };
   },
   async created() {
     const doctorId = this.$route.params.id;
     try {
-      const response = await fetch(`/api/doctors/${doctorId}`);
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch doctor: ' + response.statusText);
+      const doctorResponse = await fetch(`/api/doctors/${doctorId}`);
+      if (!doctorResponse.ok) {
+        throw new Error('Failed to fetch doctor: ' + doctorResponse.statusText);
       }
+      this.doctor = await doctorResponse.json();
 
-      this.doctor = await response.json();
+      // Загрузить специализации
+      const specializationsResponse = await fetch('http://localhost:80/api/doctors/create');
+      if (!specializationsResponse.ok) {
+        throw new Error('Failed to load specializations: ' + specializationsResponse.statusText);
+      }
+      const data = await specializationsResponse.json();
+      if (data.status) {
+        this.specializations = data.data || [];
+      } else {
+        console.error('Error loading specializations:', data.message);
+      }
     } catch (error) {
       console.error(error.message);
     }
   },
   methods: {
     async handleEditDoctor(updatedDoctorData) {
-      const doctorId = this.$route.params.id;
       try {
-        const response = await fetch(`/api/doctors/${doctorId}`, {
+        const response = await fetch(`/api/doctors/${updatedDoctorData.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.$store.getters.userToken}`,
           },
           body: JSON.stringify(updatedDoctorData),
         });
@@ -53,7 +64,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .container {
   background-color: #189AB4;
@@ -70,4 +80,9 @@ h1 {
   font-weight: bold;
   margin-bottom: 50px;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;utf8,');
+  }
 </style>

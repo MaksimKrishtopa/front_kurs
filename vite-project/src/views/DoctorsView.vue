@@ -60,7 +60,7 @@ export default {
     distributeDoctors() {
       this.doctorColumns = [[], [], []];
       this.doctors.forEach((doctor, index) => {
-        this.doctorColumns[index % 3].push(doctor); // Распределяем по трем колонкам
+        this.doctorColumns[index % 3].push(doctor); 
       });
     },
     editDoctor(id) {
@@ -70,7 +70,7 @@ export default {
       this.$router.push({ name: 'add-doctor' });
     },
     addSpecialization() {
-      // Логика добавления специализации
+      this.$router.push({ name: 'add-specialization' });
     }
   }
 };

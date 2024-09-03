@@ -50,12 +50,11 @@ export default {
       const doctorsData = await response.json();
       this.doctors = doctorsData.data;
     } catch (error) {
-      console.error('Ошибка при загрузке данных врачей:', error.message);
+      
     }
   },
   methods: {
     handleSubmit() {
-      // Преобразуем формат даты и времени в нужный
       const dateTimeFormatted = this.formData.date_and_time.replace('T', ' ');
       this.$emit('submit', { ...this.formData, date_and_time: dateTimeFormatted });
     },

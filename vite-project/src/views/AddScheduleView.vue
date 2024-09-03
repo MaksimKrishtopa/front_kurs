@@ -29,22 +29,14 @@ export default {
           }),
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Ошибка сервера:', errorData);
-          alert('Ошибка при создании расписания: ' + JSON.stringify(errorData.errors));
-          throw new Error('Не удалось добавить расписание: ' + errorData.message);
-        }
-
-        alert('Расписание успешно добавлено!');
-        this.$router.push('/schedules');
+        this.$router.push('/doctors');
       } catch (error) {
-        console.error('Ошибка при добавлении расписания:', error);
       }
     },
   },
 };
 </script>
+
 
 
 <style scoped>

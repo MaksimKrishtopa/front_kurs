@@ -34,7 +34,7 @@ export default {
         body: JSON.stringify(specializationData),
       });
 
-
+      this.$router.push('/doctors');
     } catch (error) {
     }
   },

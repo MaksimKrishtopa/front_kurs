@@ -65,9 +65,9 @@ export default {
     },
   },
   setup(props, { emit }) {
-    const store = useStore();
     const localDoctor = ref({ ...props.doctor });
     const specializations = ref([]);
+    const store = useStore();
 
     const loadSpecializations = async () => {
       try {
@@ -96,32 +96,8 @@ export default {
       localDoctor.value = { ...newVal };
     });
 
-    const handleSubmit = async () => {
-      try {
-        const endpoint = props.isEditMode
-          ? `http://localhost:80/api/doctors/${localDoctor.value.id}`
-          : 'http://localhost:80/api/doctors/create';
-        const method = props.isEditMode ? 'PUT' : 'POST';
-        const response = await fetch(endpoint, {
-          method,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${store.getters.userToken}`,
-          },
-          body: JSON.stringify(localDoctor.value),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Ошибка:', errorData);
-          throw new Error(`Не удалось ${props.isEditMode ? 'обновить' : 'добавить'} врача: ${response.statusText}`);
-        }
-
-        alert(`Врач успешно ${props.isEditMode ? 'обновлен' : 'добавлен'}!`);
-        emit('submit', localDoctor.value);
-      } catch (error) {
-        console.error(`Ошибка при ${props.isEditMode ? 'обновлении' : 'добавлении'} врача:`, error);
-      }
+    const handleSubmit = () => {
+      emit('submit', localDoctor.value);
     };
 
     return {

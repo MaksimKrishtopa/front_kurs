@@ -55,8 +55,9 @@ export default {
   },
   methods: {
     handleSubmit() {
-      // Дата и время уже в правильном формате, поэтому просто отправляем как есть
-      this.$emit('submit', { ...this.formData });
+      // Преобразуем формат даты и времени в нужный
+      const dateTimeFormatted = this.formData.date_and_time.replace('T', ' ');
+      this.$emit('submit', { ...this.formData, date_and_time: dateTimeFormatted });
     },
   },
 };

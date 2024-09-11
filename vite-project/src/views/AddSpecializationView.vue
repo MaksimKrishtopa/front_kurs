@@ -1,9 +1,7 @@
 <template>
   <div class="container">
     <div class="header">
-      <div class="header-item">+ Врача</div>
       <h1>Добавление специализации</h1>
-      <div class="header-item">+ Специализацию</div>
     </div>
     <SpecializationForm @submit="handleAddSpecialization" />
 
@@ -43,6 +41,16 @@ export default {
 </script>
 
 <style scoped>
+
+
+h1 {
+  text-align: center;
+  color: white;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 50px;
+}
+
 .container {
   background-color: #189AB4;
   border-radius: 10px;
@@ -53,27 +61,7 @@ export default {
 
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
 }
 
-.header h1 {
-  color: white;
-}
-
-.header-item {
-  color: white;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.error-message {
-  color: red;
-  margin-top: 20px;
-}
-
-.success-message {
-  color: green;
-  margin-top: 20px;
-}
 </style>

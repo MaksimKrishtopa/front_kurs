@@ -1,9 +1,7 @@
 <template>
   <div class="container">
     <div class="header">
-      <div class="header-item">+ Врача</div>
       <h1>Добавление расписания</h1>
-      <div class="header-item">+ Специализацию</div>
     </div>
     <ScheduleForm @submit="handleAddSchedule" />
   </div>
@@ -38,7 +36,6 @@ export default {
 </script>
 
 
-
 <style scoped>
 .container {
   background-color: #189AB4;
@@ -50,14 +47,16 @@ export default {
 
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
 }
 
-.header h1 {
+h1 {
+  text-align: center;
   color: white;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 50px;
 }
-
 .header-item {
   color: white;
   font-size: 18px;

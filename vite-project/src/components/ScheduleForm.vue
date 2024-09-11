@@ -1,7 +1,8 @@
 <template>
   <form @submit.prevent="handleSubmit">
+    <div class="main__form">
     <div>
-      <label for="doctor">Doctor:</label>
+      <label for="doctor">Врач:</label>
       <select v-model="formData.doctorId" required>
         <option value="" disabled>Выберите врача</option>
         <option v-for="doctor in doctors" :key="doctor.id" :value="doctor.id">
@@ -11,11 +12,13 @@
     </div>
     
     <div>
-      <label for="date_and_time">Date and Time:</label>
+      <label for="date_and_time">Дата и время:</label>
       <input type="datetime-local" v-model="formData.date_and_time" required />
     </div>
-
-    <button type="submit">Add Schedule</button>
+  </div>
+  <div class="form__btn">
+    <button type="submit">Добавить</button>
+  </div>
   </form>
 </template>
 
@@ -61,3 +64,68 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+label {
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+input, select {
+  background-color: #fff;
+  color: #343434;
+  padding: 5px;
+  font-size: 20px;
+  border-radius: 5px;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+input[type=datetime-local]::-webkit-datetime-edit-hour-field {
+  margin-left: 10px;
+}
+
+
+.form__btn {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  background-color: #fff;
+  color: #239AB5;
+  cursor: pointer;
+  padding: 12px 24px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 20px;
+  border: none;
+}
+
+button:hover {
+  background-color: #e0f7fa;
+}
+
+.form__field {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.main__form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+</style>

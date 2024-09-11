@@ -127,6 +127,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
 }
 
+
 .form__container {
   display: flex;
   flex-direction: column;

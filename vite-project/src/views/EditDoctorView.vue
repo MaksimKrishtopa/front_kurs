@@ -25,7 +25,7 @@ export default {
       }
       this.doctor = await doctorResponse.json();
 
-      // Загрузить специализации
+    
       const specializationsResponse = await fetch('http://localhost:80/api/doctors/create');
       if (!specializationsResponse.ok) {
         throw new Error('Failed to load specializations: ' + specializationsResponse.statusText);

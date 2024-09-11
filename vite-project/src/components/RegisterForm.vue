@@ -204,11 +204,4 @@ export default {
     width: 100%;
   }
 
-  .error-message {
-    color: red;
-  }
-  
-  .success-message {
-    color: rgb(255, 255, 255);
-  }
   </style>

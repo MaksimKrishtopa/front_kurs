@@ -53,11 +53,11 @@ const store = createStore({
         const res = await response.json()
         if (res.status) {
           commit('updateUserToken', res.token.split('|')[1])
-          commit('updateUserData', res.data) // Сохраняем данные пользователя
+          commit('updateUserData', res.data) 
 
-          // Проверка наличия и значения role_id
+         
           if (res.data && res.data.role_id && res.data.role_id !== 1) {
-            await dispatch('fetchUser') // Запрашиваем профиль только для обычных пользователей
+            await dispatch('fetchUser') 
           } else {
             console.log('Администратор авторизован, профиль не требуется')
           }
@@ -82,7 +82,7 @@ const store = createStore({
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        return data.specializations; // предполагаем, что API возвращает специализации в таком формате
+        return data.specializations;
       } catch (error) {
         console.error('Fetch specializations error:', error);
         throw error;

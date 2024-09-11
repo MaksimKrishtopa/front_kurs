@@ -43,7 +43,7 @@ export default {
       console.log("Login successful");
       await store.dispatch("fetchUser");
       const user = store.getters.userData;
-      console.log("User role_id:", user.role_id);  // Добавлено: вывод роли пользователя
+      console.log("User role_id:", user.role_id);  
       if (user.role_id === 1) {
         router.push("/doctors");
       } else {

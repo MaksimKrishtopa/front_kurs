@@ -115,9 +115,6 @@ export default {
   padding: 0;
 }
 
-.navbar__right li {
-}
-
 .navbar__right li:hover {
   cursor: pointer;
 }

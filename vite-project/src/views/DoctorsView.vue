@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       doctors: [],
-      doctorColumns: [[], [], []],  // Три колонки для равномерного распределения
+      doctorColumns: [[], [], []],  
     };
   },
   async created() {

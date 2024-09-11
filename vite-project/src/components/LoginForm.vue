@@ -45,7 +45,7 @@ export default {
       const user = store.getters.userData;
       console.log("User role_id:", user.role_id);  // Добавлено: вывод роли пользователя
       if (user.role_id === 1) {
-        router.push("/admin");
+        router.push("/doctors");
       } else {
         router.push("/");
       }

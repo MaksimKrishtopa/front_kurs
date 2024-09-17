@@ -7,7 +7,7 @@
         </div>
         <ul v-if="!isAdmin">
           <li><router-link to="/">Главная</router-link></li>
-          <li><router-link to="/appointments" >Запись</router-link></li>
+          <li><router-link to="/appointments">Запись</router-link></li>
         </ul>
         <ul v-if="isAdmin">
           <li><router-link to="/doctors">Врачи</router-link></li>
@@ -23,7 +23,11 @@
             <p>Личный кабинет</p>
           </router-link>
         </li>
-        <li class="logout__link" v-if="isAuthenticated" @click="logout">
+        <li v-if="isAdmin" class="admin__info">
+          <span>Админ</span>
+          <img src="../assets/logout-icon.svg" alt="logout-icon" @click="logout">
+        </li>
+        <li class="logout__link" v-if="isAuthenticated && !isAdmin" @click="logout">
           <img src="../assets/logout-icon.svg" alt="logout-icon">
         </li>
       </ul>
@@ -156,6 +160,18 @@ a:hover {
 
 .logout__link:hover {
   filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.5));
+}
+
+.admin__info {
+  display: flex;
+  gap: 10px;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+.admin__info span {
+  cursor: default;
+  font-weight: 800;
 }
 
 </style>

@@ -12,20 +12,30 @@ export default {
   components: { DoctorForm },
   data() {
     return {
-      doctor: null,
+      doctor: {
+        id: '', 
+        surname: '',
+        name: '',
+        patronymic: '',
+        gender: '',
+        date_of_birth: '',
+        specialization_id: '',
+      },
       specializations: [],
     };
   },
   async created() {
-    const doctorId = this.$route.params.id;
+    const doctorId = this.$route.params.id; 
     try {
-      const doctorResponse = await fetch(`/api/doctors/${doctorId}`);
+    
+      const doctorResponse = await fetch(`http://localhost:80/api/doctors/${doctorId}`);
       if (!doctorResponse.ok) {
         throw new Error('Failed to fetch doctor: ' + doctorResponse.statusText);
       }
-      this.doctor = await doctorResponse.json();
+      const doctorData = await doctorResponse.json();
+      this.doctor = doctorData; 
 
-    
+      
       const specializationsResponse = await fetch('http://localhost:80/api/doctors/create');
       if (!specializationsResponse.ok) {
         throw new Error('Failed to load specializations: ' + specializationsResponse.statusText);
@@ -42,8 +52,10 @@ export default {
   },
   methods: {
     async handleEditDoctor(updatedDoctorData) {
+      const doctorId = this.$route.params.id; 
       try {
-        const response = await fetch(`/api/doctors/${updatedDoctorData.id}`, {
+       
+        const response = await fetch(`http://localhost:80/api/doctors/change/${doctorId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -56,7 +68,7 @@ export default {
           throw new Error('Failed to update doctor: ' + response.statusText);
         }
 
-        this.$router.push('/doctors');
+        this.$router.push('/doctors'); 
       } catch (error) {
         console.error(error.message);
       }

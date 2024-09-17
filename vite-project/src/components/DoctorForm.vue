@@ -11,7 +11,7 @@
       </div>
       <div class="form__field">
         <label for="patronymic">Отчество:</label>
-        <input type="text" id="patronymic" v-model="localDoctor.patronymic" required />
+        <input type="text" id="patronymic" v-model="localDoctor.patronymic" />
       </div>
       <div class="form__field">
         <label for="gender">Пол:</label>
@@ -72,7 +72,7 @@ export default {
     const loadSpecializations = async () => {
       try {
         const response = await fetch('http://localhost:80/api/doctors/create', {
-          headers: store.getters.config.headers
+          headers: store.getters.config.headers,
         });
         if (!response.ok) {
           throw new Error('Failed to load specializations: ' + response.statusText);
@@ -93,11 +93,11 @@ export default {
     });
 
     watch(() => props.doctor, (newVal) => {
-      localDoctor.value = { ...newVal };
+      localDoctor.value = { ...newVal }; 
     });
 
     const handleSubmit = () => {
-      emit('submit', localDoctor.value);
+      emit('submit', localDoctor.value); 
     };
 
     return {

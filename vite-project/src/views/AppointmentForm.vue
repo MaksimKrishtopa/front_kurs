@@ -10,81 +10,144 @@
       <h1>Запись на прием</h1>
       <form @submit.prevent="bookAppointment" class="appointment-form">
         <div class="form-group">
-        <div>
-          <img src="../assets/spec-icon.svg" alt="Spec">
-          <label for="doctor">Специализация</label>
-        </div>
-          <select id="doctor" v-model="doctorId" required>
-            <option  v-for="doctor in doctors" :key="doctor.id" :value="doctor.id">{{ doctor.name }}</option>
+          <label for="specialization">Специализация:</label>
+          <select id="specialization" v-model="selectedSpecialization" required>
+            <option value="" disabled>Выберите специализацию</option>
+            <option v-for="specialization in specializations" :key="specialization.id" :value="specialization.id">
+              {{ specialization.name }}
+            </option>
           </select>
         </div>
         <div class="form-group">
-          <div>
-          <img src="../assets/date-icon.svg" alt="Date">
-          <label for="date">Выберите дату</label>
+          <label for="doctor">Доктор:</label>
+          <select id="doctor" v-model="selectedDoctor" required>
+            <option value="" disabled>Выберите доктора</option>
+            <option v-for="doctor in doctors" :key="doctor.id" :value="doctor.id">
+              {{ doctor.name }}
+            </option>
+          </select>
         </div>
-          <input type="date" id="date" v-model="date" required />
+        <div class="form-group">
+          <label for="date">Дата:</label>
+          <input type="date" id="date" v-model="selectedDate" required />
         </div>
-        <div class="form-group ">
-          <label for="time">Выберите время</label>
-          <input type="time" id="time" v-model="time" required />
+        <div class="form-group">
+          <label for="time">Время:</label>
+          <input type="time" id="time" v-model="selectedTime" required />
         </div>
         <div class="appointment__button-container">
-        <button type="submit" class="submit-button">Записаться</button>
-        </div>
+          <button class="submit-button" type="submit">Записаться</button>
+      </div>
       </form>
     </section>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   name: 'AppointmentForm',
   setup() {
-    const doctorId = ref('')
-    const date = ref('')
-    const time = ref('')
-    const doctors = ref([])
+    const selectedSpecialization = ref('');
+    const selectedDoctor = ref('');
+    const selectedDate = ref('');
+    const selectedTime = ref('');
+    const specializations = ref([]);
+    const doctors = ref([]);
 
-    onMounted(async () => {
+    const store = useStore();
+
+    const loadSpecializations = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/doctors')
-        doctors.value = await response.json()
+        const response = await fetch('http://localhost:80/api/doctors/create', {
+          headers: store.getters.config.headers,
+        });
+        const data = await response.json();
+        if (data.status) {
+          specializations.value = data.data || [];
+        } else {
+          console.error('Error loading specializations:', data.message);
+        }
       } catch (error) {
-        console.error('Error fetching doctors:', error)
+        console.error('Error loading specializations:', error.message);
       }
-    })
+    };
+
+    const loadDoctors = async () => {
+      try {
+        const token = store.getters.userToken;
+        if (!token) {
+          throw new Error('Unauthorized: No token available');
+        }
+
+        const response = await fetch(store.state.api_url + 'doctors', {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to load doctors: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        doctors.value = data.data || [];
+      } catch (error) {
+        console.error('Error loading doctors:', error.message);
+      }
+    };
 
     const bookAppointment = async () => {
       try {
-        await fetch('http://localhost:8000/api/appointments', {
+        const token = store.getters.userToken;
+        if (!token) {
+          throw new Error('Unauthorized: No token available');
+        }
+
+        const response = await fetch(store.state.api_url + 'record/create', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
           },
           body: JSON.stringify({
-            doctor_id: doctorId.value,
-            date: date.value,
-            time: time.value
-          })
-        })
-        alert('Appointment booked successfully!')
+            specialization_id: selectedSpecialization.value,
+            doctor_id: selectedDoctor.value,
+            date: selectedDate.value,
+            time: selectedTime.value,
+          }),
+        });
+
+        const result = await response.json();
+        if (result.status) {
+          alert(result.message);
+        } else {
+          console.error('Error booking appointment:', result.message);
+        }
       } catch (error) {
-        console.error('Error booking appointment:', error)
+        console.error('Error booking appointment:', error.message);
       }
-    }
+    };
+
+    onMounted(() => {
+      loadSpecializations();
+      loadDoctors();
+    });
 
     return {
-      doctorId,
-      date,
-      time,
+      selectedSpecialization,
+      selectedDoctor,
+      selectedDate,
+      selectedTime,
+      specializations,
       doctors,
-      bookAppointment
-    }
-  }
-}
+      bookAppointment,
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -136,7 +199,8 @@ export default {
   text-align: center;
   margin-bottom: 20px;
   color: #fff;
-  font-size: 30px;
+  font-size: 26px;
+  font-weight: 700;
 }
 
 .form-group > div {

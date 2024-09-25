@@ -7,7 +7,7 @@
       </ul>
     </aside>
     <section class="appointments-content">
-      <h1>ФИО пользователя</h1>
+      <h1>Мои записи</h1>
       <div class="appointment-card" v-for="n in 10" :key="n">
         <div class="appointment-details">
           <p>Запись #{{ n }}</p>
@@ -88,8 +88,9 @@ export default {
 .appointments-content h1 {
   text-align: center;
   margin-bottom: 20px;
-  font-size: 30px;
+  font-size: 26px;
   color: #fff;
+  font-weight: 700;
 }
 
 .appointment-card {
